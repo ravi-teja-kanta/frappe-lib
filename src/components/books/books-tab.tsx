@@ -1,3 +1,4 @@
+import { Book } from "@/models/book/book";
 import { ChevronRightIcon, PlusIcon } from "@radix-ui/react-icons";
 import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
@@ -5,13 +6,6 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Table, TableCaption, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../ui/table";
 
-export type Book = {
-    id: string,
-    title: string,
-    authors: string[],
-    publisher: string
-    rating: number
-}
 type IssueModalProp = {
     book: Book
 }
@@ -115,12 +109,12 @@ export default function BooksTab() {
             <div className="flex flex-col space-y-4 w-3/4">
                 <div className="flex justify-between pb-">
                     <div className="font-bold text-3xl">Search Books</div>
-                    <Button className=" w-1/6">
+                    <Button className=" w-1/6" variant={"destructive"}>
                         <PlusIcon  className="h-4 w-4 mr-2"/>
                         <div className="">Import</div>
                     </Button>
                 </div>
-                <Input type="search" placeholder="...by title, author or id" className="h-12"/>
+                <Input type="search" placeholder="by title, author or id ..." className="h-12"/>
                 {
                     books.length > 0 ?   
                     <Table className="mt-6">
@@ -129,7 +123,7 @@ export default function BooksTab() {
                             <TableHead className="w-[100px]">Id</TableHead>
                             <TableHead>Title</TableHead>
                             <TableHead>Author</TableHead>
-                            <TableHead>Rating</TableHead>
+                            {/* <TableHead>Rating</TableHead> */}
                             {/* <TableHead className="text-right"></TableHead> */}
                             </TableRow>
                         </TableHeader>
@@ -138,13 +132,16 @@ export default function BooksTab() {
                         {
                             books.map((book) => {
                                 return (
-                                    <TableRow className="p-4" key={book.id}>
+                                    <TableRow className="py-4" key={book.id}>
                                         <TableCell className="font-medium">{book.id}</TableCell>
                                         <TableCell>{book.title}</TableCell>
                                         <TableCell>{book.authors.join()}</TableCell>
-                                        <TableCell>{book.rating}</TableCell>
+                                        {/* <TableCell>{book.rating}</TableCell> */}
                                         <TableCell className="text-right pl-4">
                                             <IssueModal book={book} />
+                                            {/* <Button variant={"secondary"}>
+                                                <ChevronRightIcon className="w-4 h-4" />
+                                            </Button> */}
                                         </TableCell>
                                     </TableRow>
                                 )
