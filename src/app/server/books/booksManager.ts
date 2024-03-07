@@ -1,9 +1,10 @@
 "use server"
 
-import { getAllBooksWhichAlreadyExist, insertBooks, toBookDTO } from "./booksRepo";
+import { getAllBooksWhichAlreadyExist, insertBooks, readBook, toBookDTO } from "./booksRepo";
 import { getFrappeLibBooks } from "./frappeManager"
 import { uniq, without, uniqBy } from "lodash"
-export async function importAllBooks(title: string, numberOfBooksToImport: number) {
+
+export async function importBooksPageWise(title: string, numberOfBooksToImport: number) {
     let pageNumber = 1;
     let numberOfBooksAdded = 0;
     let finalStatus;
@@ -44,4 +45,10 @@ async function addBooksInThePage(title: string, pageNumber: number, numberOfBook
         booksAdded: booksToBeAdded.length
     }
     
+}
+
+export async function getBookProfileFromBookId(bookId: string) {
+    const book = await readBook(bookId);
+    if (!book) throw Error("Does not exist");
+    return book;
 }

@@ -1,6 +1,6 @@
 "use server"
 
-import { BookDTO } from "@/models/book/book";
+import { BookDTO } from "@/models/book";
 
 type FrappeRequest = {
     title: string,

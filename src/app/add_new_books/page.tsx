@@ -2,9 +2,9 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Book, BookDTO } from "@/models/book/book";
+import { Book, BookDTO } from "@/models/book";
 import { useState } from "react";
-import { getBooksFromFrappe } from "../server/books/booksAPI";
+import { importBooks } from "../server/books/booksAPI";
 import { getBooks } from "../server/books/booksRepo";
 
 export default function Page() {
@@ -14,7 +14,7 @@ export default function Page() {
     const [books, setBooks] = useState<BookDTO[]>([]);
 
     async function handleSearchFrappe() {
-        let {status, message} = await getBooksFromFrappe(title, numberOfBooks);
+        let {status, message} = await importBooks(title, numberOfBooks);
         alert(status + " " + message);
         let books = await getBooks();
         setBooks(books!!);

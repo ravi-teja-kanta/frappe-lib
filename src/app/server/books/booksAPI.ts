@@ -1,17 +1,18 @@
 "use server"
 
-import supabase from "@/lib/supabase";
-import { Book, BookDTO } from "@/models/book/book";
-import { importAllBooks } from "./booksManager";
-import { getAllBooksWhichAlreadyExist } from "./booksRepo";
+import { getBookProfileFromBookId, importBooksPageWise } from "./booksManager";
 
-export async function getBooksFromFrappe(title: string, numberOfBooks: number) {
+export async function importBooks(title: string, numberOfBooks: number) {
 
     if (numberOfBooks > 200) return { status: "fail", books: [], message: "Max number of books allowed is 200"};
 
-    const {status, numberOfBooksAdded} = await importAllBooks(title, numberOfBooks);
+    const {status, numberOfBooksAdded} = await importBooksPageWise(title, numberOfBooks);
     
     console.log(status, numberOfBooks)
     
     return { status, message: `Added ${numberOfBooksAdded} books`};
+}
+
+export async function getBookProfile(id: string) {
+    return await getBookProfileFromBookId(id);
 }
