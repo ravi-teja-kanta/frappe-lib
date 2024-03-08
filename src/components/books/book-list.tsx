@@ -24,13 +24,14 @@ function BookListItem(book: Book) {
         setIssueBook(true);
         setIsLoading(true);
         const issue  = await getLatestIssueStatusofBook(book.id!!);
-        console.log(issue)
         setIsLoading(false);
         setIssue(issue);
     }
+
     const [issueBook, setIssueBook] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [issue, setIssue] = useState<IssueDTO>();
+    
     return (
         <Card className="">
             <CardHeader>

@@ -2,7 +2,7 @@ import { IssueBookToMemberResponse, IssueDTO } from "@/models/issue";
 import { getOutStandingBalance } from "../members/memberManager";
 import { getMember } from "../members/membersRepo";
 import { insertTransaction, toPaise, toRupees } from "../transactions/transactionsRepo";
-import {getIssueFromBookId, insertIssue, markIssueAsInActive} from "./issuesRepo";
+import {getIssueFromBookId, getIssuesFromMemberId, insertIssue, markIssueAsInActive} from "./issuesRepo";
 
 export async function getIssue(bookId: string) {
     return await getIssueFromBookId(bookId)   
@@ -48,4 +48,9 @@ export async function issueBookToMember(bookId: string, memberId: string, rentFe
     }
 
     return response;
+}
+
+export async function getActiveIssuesOfMember(memberId: string) {
+    const issues = await getIssuesFromMemberId(memberId);
+    return issues;
 }

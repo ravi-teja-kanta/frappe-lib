@@ -13,7 +13,7 @@ export async function getAllTransactions(memberId: string): Promise<TransactionD
     return transactions || [];
 }
 
-export async function insertTransaction(memberId: string, type: TransactionType, amount: number) {
+export async function insertTransaction(memberId: string, type: TransactionType, amount: number): Promise<TransactionDTO> {
     
     const { data, error } = 
         await supabase
@@ -28,7 +28,7 @@ export async function insertTransaction(memberId: string, type: TransactionType,
             .select();
     if (error) throw Error(error.message);
 
-    return data;
+    return data?.pop();
         
 }
 

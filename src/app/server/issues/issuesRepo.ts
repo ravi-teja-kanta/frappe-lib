@@ -22,7 +22,7 @@ export async function markIssueAsInActive(issueId: string): Promise<IssueDTO> {
         await supabase
             .from('issues')
             .update({ issue_is_active: false })
-            .eq('issue_book_id', issueId)
+            .eq('id', issueId)
             .eq("issue_is_active", true)
             .select()
     if (error) throw Error(error.message);
@@ -53,4 +53,20 @@ export async function insertIssue(
     if (error) throw Error(error.message);
     
     return data.pop();
+}
+
+export async function getIssuesFromMemberId(memberId: string): Promise<IssueDTO[]> {
+    
+    const { data: issues, error } = 
+        await supabase
+            .from('issues')
+            .select('*')
+            .eq("issue_member_id", memberId)
+            .eq("issue_is_active", true)
+            .eq("issue_status", "ISSUED_TO_MEMBER")
+    
+    if (error) throw Error(error.message)
+
+    return issues;
+
 }

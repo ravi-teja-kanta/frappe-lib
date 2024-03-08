@@ -1,4 +1,5 @@
 export type IssueDTO = {
+    id?: string,
     issue_book_id: string,
     issue_member_id: string,
     issue_status: IssueStatus,

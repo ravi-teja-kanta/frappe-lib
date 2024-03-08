@@ -119,3 +119,18 @@ export async function readBook(bookId: string): Promise<BookDTO> {
 
     return books.pop();
 }
+
+
+export async function getBooksDetails(bookIds: string[]): Promise <BookDTO[]> {
+    
+    let { data, error, count } = 
+        await supabase
+            .from('books')
+            .select("*")
+            .in('id', bookIds);
+
+    if (error) throw Error(error.message)
+    
+    return data || [];
+        
+}
