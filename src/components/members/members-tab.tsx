@@ -17,6 +17,10 @@ export default function MembersTab() {
     async function handleGetMemberDetails() {
         if (!memberId || memberId==="") return;
         const member = await getMember(memberId);
+        if (!member) {
+            alert("member Id not found")
+            return
+        }
         const borrowedBooks = await getBooksToBeReturned(member.id);
         const outStandingDues = await getOutStandingBalance(member.id);
         setMember(member);

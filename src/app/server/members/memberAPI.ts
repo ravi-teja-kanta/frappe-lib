@@ -1,4 +1,5 @@
-import { getAllActiveIssuesAndBookDetails, getMemberDetails, markBookAsAvailable, settleMemberDues } from "./memberManager";
+import { MemberDTO } from "@/models/member";
+import { addNewMemberDetails, getAllActiveIssuesAndBookDetails, getMemberDetails, markBookAsAvailable, settleMemberDues } from "./memberManager";
 
 export async function getMember(memberId: string) {
     return await getMemberDetails(memberId)
@@ -29,5 +30,15 @@ export async function settleDues(memberId: string) {
     } catch(e) {
         console.error(JSON.stringify(e));
         return false;
+    }
+}
+
+export async function addNewMember(memberDetails: any) {
+    try {
+        const {id} = await addNewMemberDetails(memberDetails);
+        return id!!;
+    } catch(e) {
+        console.error(JSON.stringify(e));
+        return undefined;
     }
 }
