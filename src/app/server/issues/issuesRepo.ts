@@ -1,5 +1,5 @@
 import supabase from "@/lib/supabase";
-import { IssueDTO, IssueStatus } from "@/models/issue";
+import { IssueCountDateWise, IssueDTO, IssueStatus } from "@/models/issue";
 
 export async function getIssueFromBookId(bookId: string): Promise<IssueDTO | undefined> {
     
@@ -69,4 +69,32 @@ export async function getIssuesFromMemberId(memberId: string): Promise<IssueDTO[
 
     return issues;
 
+}
+
+export async function getAllIssuesOfDate(date: Date): Promise<IssueDTO[]> {
+    const { data: issues, error } = 
+        await supabase
+            .from('issues')
+            .select('*')
+            .eq("issue_date", date.toISOString().slice(0, 10))
+            .eq("issue_status", "ISSUED_TO_MEMBER");
+    
+    if (error) throw Error(error.message);
+    
+    return issues;
+}
+
+export async function getIssuesByDates(dates: Date[]): Promise<IssueDTO[]> {
+    const isoDates = dates.map(d => d.toISOString().slice(0, 10));
+    const { data: issues, error } = 
+        await supabase
+            .from('issues')
+            .select('*')
+            .in("issue_date", isoDates)
+            .eq("issue_status", "ISSUED_TO_MEMBER")
+
+
+    if (error) throw Error(error.message);
+    console.log(issues)
+    return issues;
 }

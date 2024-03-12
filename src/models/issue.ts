@@ -12,3 +12,8 @@ export type IssueBookToMemberResponse = {
     isBookIssued: boolean,
     reason?: string,
 }
+
+export type IssueCountDateWise = {
+    date: Date,
+    count: number
+}

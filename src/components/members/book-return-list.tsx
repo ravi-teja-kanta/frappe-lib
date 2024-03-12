@@ -11,34 +11,37 @@ type BookReturnListProps = {
     books: BookDTO[]
 }
 
+function ReturnsListItem({book, memberId}: any) {
+    async function handleReturn(bookId: string) {
+        const { isBookReturned, reason } = await returnBook(bookId, memberId);
+        if (isBookReturned)  {
+            setMessage("Book Returned!")
+            setIsBookReturned(true);
+        }
+        else alert("something went wront")
+    }
+
+    const [message, setMessage] = useState<string>();
+    const [isBookReturned, setIsBookReturned] = useState<boolean>();
+    
+    return (
+        <TableRow key={book.book_book_id}>
+            <TableCell className="font-medium">{book.book_book_id}</TableCell>
+            <TableCell>{book.book_title}</TableCell>
+            <TableCell>{book.book_publisher}</TableCell>
+            <TableCell className="text-right w-fit">
+                {
+                    isBookReturned ? <div className="text-green-600 p-1">{message}</div>
+                    :<Button variant={"outline"} onClick={() => handleReturn(book.id!!)}>Return</Button>
+                }
+            </TableCell>
+        </TableRow>
+    )
+}
+
 export function ReturnsList({memberId, books}: BookReturnListProps) {
     
-    function ReturnsListItem(book: BookDTO) {
-        async function handleReturn(bookId: string) {
-            const { isBookReturned, reason } = await returnBook(bookId, memberId);
-            if (isBookReturned)  {
-                setMessage("Book Returned!")
-                setIsBookReturned(true);
-            }
-            else alert("something went wront")
-        }
-        const [message, setMessage] = useState<string>();
-        const [isBookReturned, setIsBookReturned] = useState<boolean>();
-
-        return (
-            <TableRow key={book.book_book_id}>
-                <TableCell className="font-medium">{book.book_book_id}</TableCell>
-                <TableCell>{book.book_title}</TableCell>
-                <TableCell>{book.book_publisher}</TableCell>
-                <TableCell className="text-right w-fit">
-                    {
-                        isBookReturned ? <div className="text-green-600 p-1">{message}</div>
-                        :<Button variant={"outline"} onClick={() => handleReturn(book.id!!)}>Return</Button>
-                    }
-                </TableCell>
-            </TableRow>
-        )
-    }
+    if (books.length < 1) return null;
     return (
         <div className="flex flex-col w-full border p-6 rounded">
             <div className="text-2xl font-bold mb-4">Borrow History</div>
@@ -53,7 +56,7 @@ export function ReturnsList({memberId, books}: BookReturnListProps) {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {books.map(ReturnsListItem)}
+                {books.map((b) => <ReturnsListItem book={b} memberId={memberId} />)}
             </TableBody>
         </Table>
         </div>

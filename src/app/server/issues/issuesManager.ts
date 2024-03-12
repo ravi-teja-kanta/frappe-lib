@@ -1,8 +1,11 @@
 import { IssueBookToMemberResponse, IssueDTO } from "@/models/issue";
+import { toPaise, toRupees } from "@/models/transaction";
+import { subDays } from "date-fns";
+import _ from "lodash";
 import { getOutStandingBalance } from "../members/memberManager";
 import { getMember } from "../members/membersRepo";
-import { insertTransaction, toPaise, toRupees } from "../transactions/transactionsRepo";
-import {getIssueFromBookId, getIssuesFromMemberId, insertIssue, markIssueAsInActive} from "./issuesRepo";
+import { insertTransaction } from "../transactions/transactionsRepo";
+import {getAllIssuesOfDate, getIssueFromBookId, getIssuesFromMemberId, getIssuesByDates, insertIssue, markIssueAsInActive} from "./issuesRepo";
 
 export async function getIssue(bookId: string) {
     return await getIssueFromBookId(bookId)   
@@ -50,7 +53,29 @@ export async function issueBookToMember(bookId: string, memberId: string, rentFe
     return response;
 }
 
+export async function getTodaysIssues() {
+    return await getAllIssuesOfDate(new Date());
+}
+
 export async function getActiveIssuesOfMember(memberId: string) {
     const issues = await getIssuesFromMemberId(memberId);
     return issues;
+}
+
+export async function getLast14DaysOfIssues() {
+    // ideally, such computed queries should be queried through a OLAP db, cached or generated on demand.
+    const last14Dates = [];
+    for(let i = 0; i<=14; i++) {
+        last14Dates.push(subDays(new Date(), i))
+    }
+    const issues = await getIssuesByDates(last14Dates);
+
+    const dateCount = _.groupBy(issues, (i) => i.issue_date);
+
+    return Object.keys(dateCount).map(d => {
+        return {
+            "date": d,
+            "count": dateCount[d].length
+        }
+    })
 }

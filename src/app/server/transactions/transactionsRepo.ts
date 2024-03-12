@@ -1,5 +1,7 @@
 import supabase from "@/lib/supabase";
+import { MemberDTO } from "@/models/member";
 import { TransactionDTO, TransactionType } from "@/models/transaction";
+import { addDays } from "date-fns";
 
 export async function getAllTransactions(memberId: string): Promise<TransactionDTO[]> {
     
@@ -32,10 +34,33 @@ export async function insertTransaction(memberId: string, type: TransactionType,
         
 }
 
-export function toRupees(paise: number) {
-    return paise / 100
+
+export async function getTransactionsByDate(date: Date): Promise<TransactionDTO[]> {
+    
+    const nextDay = addDays(date, 1);
+
+    
+    const { data: transactions, error } = 
+        await supabase
+            .from('transactions')
+            .select("*")
+            .lte('transaction_created_at', nextDay.toISOString())
+            .gte('transaction_created_at', date.toISOString().slice(0, 10))
+            .eq('transaction_type', "MEMBER_PAID")
+            .order("transaction_created_at", { ascending: false})
+
+    if (error) throw Error(error.message);
+    
+    return transactions;
 }
 
-export function toPaise(rupees: number) {
-    return rupees * 100;
+export async function getTodaysTransactionsWithMemberDetails() {
+  
+    const { data, error } = await supabase
+        .from('todays_transactions_with_member_details') // Specify the name of your view here
+        .select('*'); // You can select specific columns if needed
+
+    if(error) throw Error(error.message);
+    console.log(data)
+    return data;
 }

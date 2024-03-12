@@ -3,6 +3,7 @@ import { Book } from "@/models/book"
 import { IssueDTO } from "@/models/issue"
 import { ChevronDownIcon, ChevronRightIcon, StarFilledIcon } from "@radix-ui/react-icons"
 import { Label } from "@radix-ui/react-label"
+import { formatDistance } from "date-fns"
 import { useState } from "react"
 import { Badge } from "../ui/badge"
 import { Button } from "../ui/button"
@@ -78,7 +79,7 @@ function BookListItem(book: Book) {
                                 issue?.issue_status === "ISSUED_TO_MEMBER" &&
                                 <div className="flex justify-between">
                                     <Badge variant={"available"} className="px-2 py-1 bg-red-900">Book Not Available</Badge>
-                                    <div className="text-sm">{"Last issued on" + issue?.issue_date.toString()}</div>
+                                    <div className="text-sm">{"Last issued " + formatDistance(issue?.issue_date, new Date(), {addSuffix: true}) }</div>
                                 </div>
                             }
                         </div>

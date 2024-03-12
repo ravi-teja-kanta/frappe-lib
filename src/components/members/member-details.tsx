@@ -1,6 +1,5 @@
 import { getAllIssuesOfMember } from "@/app/server/issues/issuesAPI";
 import { getBooksToBeReturned, settleDues } from "@/app/server/members/memberAPI";
-import { toRupees } from "@/app/server/transactions/transactionsRepo";
 import { BookDTO } from "@/models/book";
 import { IssueDTO } from "@/models/issue";
 import { MemberDTO } from "@/models/member";
@@ -12,20 +11,22 @@ import { Button } from "../ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { Separator } from "../ui/separator";
 import { ReturnsList } from "./book-return-list";
-import Image from "next/image"
 import noBooksToReturn from "../../../public/no_books_to_return.svg";
-
+import { toRupees } from "@/models/transaction";
+import Image from "next/image"
+import emptyMembers from "../../../public/member_search.svg";
 
 type MemberProps = {
-    member: MemberDTO,
-    borrowedBooks: BookDTO[],
-    outStandingDues: number
+    member?: MemberDTO,
+    borrowedBooks?: BookDTO[],
+    outStandingDues?: number
 }
 
-type PaymentStatus = "NOT_STARTED" | "PAID" | "FAILED"
+type PaymentStatus = "NOT_STARTED" | "PAID" | "FAILED";
+
 export default function MemberDetails({ member, borrowedBooks, outStandingDues }: MemberProps) {
     async function handlePay() {
-        const isSettled = await settleDues(member.id);
+        const isSettled = await settleDues(member?.id!!);
         
         if (!isSettled) {
             setPaymentStatus("FAILED")
@@ -34,9 +35,13 @@ export default function MemberDetails({ member, borrowedBooks, outStandingDues }
             setDues(0);
         }
     }
+    if (!member || !borrowedBooks || (outStandingDues === undefined)) 
+        return <Image src={emptyMembers} alt={""} width={300} className="mx-auto mt-16" />
+
     const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>("NOT_STARTED");
     const [dues, setDues] = useState<number>(outStandingDues);
 
+    
     return (
         <div className="flex flex-col mt-6 mx-auto w-3/4 space-y-4">
             <div className="font-bold text-2xl">Member Profile</div>
@@ -86,7 +91,7 @@ export default function MemberDetails({ member, borrowedBooks, outStandingDues }
             </div>
             {/* <Separator /> */}
             {
-                (borrowedBooks.length > 0) && <ReturnsList memberId={member.id} books={borrowedBooks} />
+                <ReturnsList memberId={member.id!!} books={borrowedBooks} />
                 
             }
         </div>

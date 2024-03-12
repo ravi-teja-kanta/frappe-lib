@@ -4,7 +4,7 @@ import { getLatestIssueStatusofBook } from "../issues/issuesAPI";
 import { getActiveIssuesOfMember } from "../issues/issuesManager";
 import { insertIssue, markIssueAsInActive } from "../issues/issuesRepo";
 import { getAllTransactions, insertTransaction } from "../transactions/transactionsRepo";
-import { getMember, insertMember, toMemberDTO } from "./membersRepo";
+import { getMember, getMembersByDate, insertMember, toMemberDTO } from "./membersRepo";
 
 export async function getOutStandingBalance(memberId: string) {
     const transactions = await getAllTransactions(memberId);
@@ -46,4 +46,8 @@ export async function settleMemberDues(memberId: string) {
 export async function addNewMemberDetails(memberDetails: any) {
     const member = toMemberDTO(memberDetails);
     return await insertMember(member);
+}
+
+export async function getNewMemberRegistrationsOfDate(date: Date) {
+    return await getMembersByDate(date);
 }

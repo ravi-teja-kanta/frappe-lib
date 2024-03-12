@@ -3,29 +3,32 @@
 import { getAllBooksWhichAlreadyExist, insertBooks, readBook, toBookDTO } from "./booksRepo";
 import { getFrappeLibBooks } from "./frappeManager"
 import { uniq, without, uniqBy } from "lodash"
+import { BookDTO } from "@/models/book";
 
 export async function importBooksPageWise(title: string, numberOfBooksToImport: number) {
     let pageNumber = 1;
     let numberOfBooksAdded = 0;
     let finalStatus;
+    let finalBooksAdded: BookDTO[] = [];
     while(numberOfBooksAdded < numberOfBooksToImport) {
         const { status, booksAdded } = await addBooksInThePage(title, pageNumber, numberOfBooksToImport - numberOfBooksAdded);
         finalStatus = status;
         if (status === "ADDED_ALL_BOOKS" || status === "NO_BOOKS_LEFT_TO_SEARCH") break;
         else {
-            numberOfBooksAdded += booksAdded;
+            numberOfBooksAdded += booksAdded.length;
+            finalBooksAdded = finalBooksAdded.concat(finalBooksAdded, booksAdded)
             pageNumber += 1;
         }
     }
-    return { status: finalStatus, numberOfBooksAdded };
+    return { status: finalStatus, booksAdded: finalBooksAdded };
 }
 
 async function addBooksInThePage(title: string, pageNumber: number, numberOfBooksLeft: number) {
-    if (numberOfBooksLeft < 1) return { status: "ADDED_ALL_BOOKS", booksAdded: 0};
+    if (numberOfBooksLeft < 1) return { status: "ADDED_ALL_BOOKS", booksAdded: []};
 
     const books = uniqBy(await getFrappeLibBooks({title, pageNumber}), "bookID"); // handling duplicates returned by frappe
     
-    if (books.length < 1) return { status: "NO_BOOKS_LEFT_TO_SEARCH", booksAdded: 0}
+    if (books.length < 1) return { status: "NO_BOOKS_LEFT_TO_SEARCH", booksAdded: []}
 
     const bookIds = books.map(b => b["bookID"]);
     
@@ -42,7 +45,7 @@ async function addBooksInThePage(title: string, pageNumber: number, numberOfBook
     
     return {
         status: "ADDED_BOOKS_IN_THE_PAGE",
-        booksAdded: booksToBeAdded.length
+        booksAdded: booksToBeAdded
     }
     
 }
