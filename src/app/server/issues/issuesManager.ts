@@ -78,5 +78,9 @@ export async function getLast14DaysOfIssues() {
             "date": d,
             "count": dateCount[d].length
         }
+        // @ts-ignore
+    }).sort((a, b) => {
+        if (a.date < b.date) return -1;
+        else 1
     })
 }

@@ -1,4 +1,5 @@
 "use client"
+import { toSupabaseDate } from '@/lib/date';
 import { formatDistance } from 'date-fns';
 import {
     ResponsiveContainer,
@@ -16,7 +17,7 @@ export function WeeklyStatsChart({ dayWiseIssueCount }: any) {
 		return (
 		  <g transform={`translate(${x},${y})`}>
 			<text x={0} y={0} dy={16} textAnchor="middle" fill="#666">
-			  {formatDistance(new Date(payload.value), new Date(), { addSuffix: true })}
+			  {formatDistance(new Date(payload.value), toSupabaseDate(new Date()), { addSuffix: true })}
 			</text>
 		  </g>
 		);

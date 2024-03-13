@@ -1,4 +1,5 @@
 import { TransactionWithMemberDTO } from "@/app/server/transactions/transactionsAPI"
+import { toSupabaseDate } from "@/lib/date"
 import { toRupees, TransactionDTO } from "@/models/transaction"
 import { format, formatDistance, formatRelative, subDays } from 'date-fns'
 
@@ -11,7 +12,7 @@ function TransactionListItem(trans: TransactionWithMemberDTO) {
             </div>
             <div>
                 <div className="text-sm my-auto text-end">Rs. {toRupees(trans.transaction_amount)}</div>
-                <div className="text-xs text-gray-500">{formatRelative(trans.transaction_created_at, new Date())}</div>
+                <div className="text-xs text-gray-500">{formatRelative(trans.transaction_created_at, toSupabaseDate(new Date()))}</div>
             </div>
         </div>
     )

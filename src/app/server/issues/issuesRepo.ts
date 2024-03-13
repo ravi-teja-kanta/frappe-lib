@@ -47,7 +47,7 @@ export async function insertIssue(
                     "issue_book_id": bookId,
                     "issue_member_id": memberId,
                     "issue_status": issueStatus,
-                    "issue_date": new Date()
+                    "issue_date": toSupabaseDate(new Date())
                 },
             ])
             .select()
