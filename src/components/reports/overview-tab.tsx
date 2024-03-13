@@ -12,7 +12,7 @@ import { WeeklyStatsChart } from "./weekly-stats-chart";
 
 export function OverViewTab({numberOfIssues, newRegistrations, trans, dayWiseIssueCount}: any) {
     
-	const totalRevenue = toRupees(trans.reduce((acc: number, curr: TransactionWithMemberDTO) => { acc += curr.transaction_amount; return acc}, 0))
+	const totalRevenue = toRupees(trans?.reduce((acc: number, curr: TransactionWithMemberDTO) => { acc += curr.transaction_amount; return acc}, 0) || 0)
 
     return (
         <div className="flex flex-col mx-auto w-3/4 space-y-2">

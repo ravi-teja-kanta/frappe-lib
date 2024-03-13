@@ -1,3 +1,4 @@
+"use client"
 import BooksTab from "@/components/books/books-tab";
 import MembersTab from "@/components/members/members-tab";
 import { OverViewTab } from "@/components/reports/overview-tab";
@@ -7,22 +8,38 @@ import { IssueDTO } from "@/models/issue";
 import { toRupees, TransactionDTO } from "@/models/transaction";
 import { AvatarIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { getAllIssuesOfToday, getDayWiseIssueCount } from "./server/issues/issuesAPI";
 import { getAllNewMemberRegistrationsForToday } from "./server/members/memberAPI";
 import { getAllTransactionsForToday, TransactionWithMemberDTO } from "./server/transactions/transactionsAPI";
 
-export default async function Home() {
-	const [
-		issues,
-		newRegs,
-		trans,
-		dayWiseIssueCount
-	] = await Promise.all([
-		getAllIssuesOfToday(),
-		getAllNewMemberRegistrationsForToday(),
-		getAllTransactionsForToday(),
-		getDayWiseIssueCount()
-	])
+export default function Home() {
+
+	useEffect(() => {
+		Promise.all([
+			getAllIssuesOfToday(),
+			getAllNewMemberRegistrationsForToday(),
+			getAllTransactionsForToday(),
+			getDayWiseIssueCount()
+		]).then(([
+			issues,
+			newRegs,
+			trans,
+			dayWiseIssueCount
+		]) => {
+			 setIssues(issues);
+			 setNewRegs(newRegs.length);
+			 setTrans(trans);
+			 // @ts-ignore
+			 setDayWiseIssueCount(dayWiseIssueCount)
+		})
+	}, []);
+	
+
+	const [issues, setIssues] = useState<IssueDTO[]>();
+	const [newRegs, setNewRegs] = useState<number>();
+	const [trans, setTrans] = useState<TransactionWithMemberDTO[]>();
+	const [dayWiseIssueCount, setDayWiseIssueCount] = useState();
 
   	return (
 		<main className="flex min-h-screen flex-col p-12">
@@ -50,7 +67,7 @@ export default async function Home() {
 					</TabsList>
 					<TabsContent value="overview">
 						
-						<OverViewTab numberOfIssues={issues.length} newRegistrations={newRegs.length} trans={trans} dayWiseIssueCount={dayWiseIssueCount} />
+						<OverViewTab numberOfIssues={issues?.length} newRegistrations={newRegs} trans={trans} dayWiseIssueCount={dayWiseIssueCount} />
 						
 						
 					</TabsContent>
