@@ -2,8 +2,14 @@ import { getOutStandingBalance } from "@/app/server/members/memberManager";
 import { useEffect } from "react";
 import { Card, CardHeader, CardDescription, CardContent, CardTitle } from "../ui/card";
 
-export function StatsNav({numberOfIssues, totalRevenue, newRegistrations}: any) {
-    const n = 45678;
+
+type StatsNavProps = {
+    numberOfIssues: number,
+    totalRevenue: number,
+    newRegistrations: number
+}
+
+export function StatsNav({numberOfIssues, totalRevenue, newRegistrations}: StatsNavProps) {
    
     return (
         <div className="flex space-x-2">
@@ -12,11 +18,13 @@ export function StatsNav({numberOfIssues, totalRevenue, newRegistrations}: any) 
                         <CardDescription className="text-sm font-medium">
                         Total Revenue
                         </CardDescription>
-                        {/* <div className="text-sm font-medium">INR</div> */}
                     </CardHeader>
                     <CardContent>
 
-                        <div className="text-2xl font-bold">{parseInt(totalRevenue || 0).toLocaleString()} INR</div>
+                        <div className="flex space-x-2">
+                            <div className="text-2xl font-bold">{totalRevenue.toLocaleString()}</div>
+                            <div className="text-sm font-medium my-auto">INR</div>
+                        </div>
                     </CardContent>
                 </Card>
                 <Card className="flex-1">

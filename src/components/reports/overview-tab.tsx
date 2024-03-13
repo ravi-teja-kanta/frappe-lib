@@ -1,3 +1,5 @@
+import { TransactionWithMemberDTO } from "@/app/server/transactions/transactionsAPI";
+import { toRupees } from "@/models/transaction";
 import { AvatarIcon, DownloadIcon } from "@radix-ui/react-icons";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -8,8 +10,9 @@ import { StatsNav } from "./stats-nav-overview-tab";
 import { WeeklyStatsChart } from "./weekly-stats-chart";
 
 
-export function OverViewTab({numberOfIssues, totalRevenue, newRegistrations, trans, dayWiseIssueCount}: any) {
+export function OverViewTab({numberOfIssues, newRegistrations, trans, dayWiseIssueCount}: any) {
     
+	const totalRevenue = toRupees(trans.reduce((acc: number, curr: TransactionWithMemberDTO) => { acc += curr.transaction_amount; return acc}, 0))
 
     return (
         <div className="flex flex-col mx-auto w-3/4 space-y-2">
@@ -18,8 +21,8 @@ export function OverViewTab({numberOfIssues, totalRevenue, newRegistrations, tra
             <StatsNav numberOfIssues={numberOfIssues} totalRevenue={totalRevenue} newRegistrations={newRegistrations} />
             <div className="flex space-x-2">
                 <WeeklyStatsChart dayWiseIssueCount={dayWiseIssueCount} />
-                {/* @ts-ignore */}
-                <RecentTransactions trans={trans} />  
+                
+                <RecentTransactions transactionsWithMemberDetails={trans} />  
             </div>
             
 

@@ -12,12 +12,18 @@ import { getAllNewMemberRegistrationsForToday } from "./server/members/memberAPI
 import { getAllTransactionsForToday, TransactionWithMemberDTO } from "./server/transactions/transactionsAPI";
 
 export default async function Home() {
-	const issues = await getAllIssuesOfToday();
-	const newRegs = await getAllNewMemberRegistrationsForToday()
-	const trans = await getAllTransactionsForToday();
-	const dayWiseIssueCount = await getDayWiseIssueCount();
+	const [
+		issues,
+		newRegs,
+		trans,
+		dayWiseIssueCount
+	] = await Promise.all([
+		getAllIssuesOfToday(),
+		getAllNewMemberRegistrationsForToday(),
+		getAllTransactionsForToday(),
+		getDayWiseIssueCount()
+	])
 
-	const totalRevenue = toRupees(trans.reduce((acc: number, curr: TransactionWithMemberDTO) => { acc += curr.transaction_amount; return acc}, 0))
   	return (
 		<main className="flex min-h-screen flex-col p-12">
 			<div>
@@ -44,7 +50,7 @@ export default async function Home() {
 					</TabsList>
 					<TabsContent value="overview">
 						
-						<OverViewTab numberOfIssues={issues.length} totalRevenue={totalRevenue} newRegistrations={newRegs.length} trans={trans} dayWiseIssueCount={dayWiseIssueCount} />
+						<OverViewTab numberOfIssues={issues.length} newRegistrations={newRegs.length} trans={trans} dayWiseIssueCount={dayWiseIssueCount} />
 						
 						
 					</TabsContent>

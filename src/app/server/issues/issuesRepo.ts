@@ -72,20 +72,20 @@ export async function getIssuesFromMemberId(memberId: string): Promise<IssueDTO[
 }
 
 export async function getAllIssuesOfDate(date: Date): Promise<IssueDTO[]> {
+    
     const { data: issues, error } = 
         await supabase
             .from('issues')
             .select('*')
-            .eq("issue_date", date.toISOString().slice(0, 10))
+            .eq("issue_date", date.toISOString())
             .eq("issue_status", "ISSUED_TO_MEMBER");
     
     if (error) throw Error(error.message);
-    
     return issues;
 }
 
 export async function getIssuesByDates(dates: Date[]): Promise<IssueDTO[]> {
-    const isoDates = dates.map(d => d.toISOString().slice(0, 10));
+    const isoDates = dates.map(d => d.toISOString());
     const { data: issues, error } = 
         await supabase
             .from('issues')
@@ -95,6 +95,6 @@ export async function getIssuesByDates(dates: Date[]): Promise<IssueDTO[]> {
 
 
     if (error) throw Error(error.message);
-    console.log(issues)
+    
     return issues;
 }

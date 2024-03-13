@@ -17,13 +17,19 @@ function TransactionListItem(trans: TransactionWithMemberDTO) {
     )
 }
 
-export function RecentTransactions({trans}: any) {
+type RecentTransactionsProps = {
+    transactionsWithMemberDetails: TransactionWithMemberDTO[]
+}
+
+export function RecentTransactions({transactionsWithMemberDetails}: RecentTransactionsProps) {
     return (
         <div className="border rounded-lg p-4 h-fit w-1/2">
             <div className="font-semibold">Recent Transactions</div>
+            
             <div className=" flex flex-col space-y-2 mt-2">
                 {
-                    trans?.map(TransactionListItem)
+                    transactionsWithMemberDetails?.map(TransactionListItem) ||
+                    <div className="text-sm mt-4 text-center text-slate-400">No recent transactions</div>
                 }
             </div> 
         </div> 
