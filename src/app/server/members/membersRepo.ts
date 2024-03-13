@@ -1,3 +1,4 @@
+import { toSupabaseDate } from "@/lib/date";
 import supabase from "@/lib/supabase";
 import { MemberDTO } from "@/models/member";
 import { addDays, subDays } from "date-fns";
@@ -48,8 +49,8 @@ export async function getMembersByDate(date: Date) {
         await supabase
             .from('members')
             .select("*")
-            .lte('member_created_at', nextDay.toISOString())
-            .gte('member_created_at', date.toISOString().slice(0, 10))
+            .lte('member_created_at', toSupabaseDate(nextDay))
+            .gte('member_created_at', toSupabaseDate(date).slice(0, 10))
 
     if (error) throw Error(error.message);
     

@@ -23,22 +23,28 @@ export default function MembersTab() {
         const member = await getMember(memberId);
         const borrowedBooks = await getBooksToBeReturned(memberId);
         const outStandingDues = await getOutStandingBalance(memberId);
-        setMember(member);
-        setBorrowedBooks(borrowedBooks);
-        setOutstandingDues(outStandingDues);
+        if (member) {
+            setIsMemberNotFoundMessage(undefined);
+            setMember(member);
+            setBorrowedBooks(borrowedBooks);
+            setOutstandingDues(outStandingDues);
+        }
+        else setIsMemberNotFoundMessage(true);
     }
     const [member, setMember] = useState<MemberDTO>();
     const [memberId, setMemberId] = useState<string>();
     const [borrowedBooks, setBorrowedBooks] = useState<BookDTO[]>();
     const [outStandingDues, setOutstandingDues] = useState<number>();
+    const [isMemberNotFound, setIsMemberNotFoundMessage] = useState<boolean>();
+
     const router = useRouter();
     return (
         <div className="flex flex-col px-12 p-6 justify-around">
            <div className="flex justify-center space-x-2 w-full">
-            <div className="flex flex-col space-y-1">
-                <Label className="text-lg font-semibold">Search Member</Label>
-                <Input type={"text"} placeholder="Member Id" className="w-[400px]" onChange={(e) => setMemberId(e.target.value)}/>
-            </div>
+                <div className="flex flex-col space-y-1">
+                    <Label className="text-lg font-semibold">Search Member</Label>
+                    <Input type={"text"} placeholder="Member Id" className="w-[400px]" onChange={(e) => setMemberId(e.target.value)}/>
+                </div>
                 <Button className="mt-auto" onClick={handleGetMemberDetails}>
                     Get Member Profile
                 </Button>
@@ -47,6 +53,8 @@ export default function MembersTab() {
                     Add New Member
                 </Button>
            </div>
+           {isMemberNotFound && <div className="mx-auto mt-4 text-red-800">* Member Id does not exist. Hint: Try from 1 to 7 </div>}
+
             <MemberDetails member={member} borrowedBooks={borrowedBooks} outStandingDues={outStandingDues} />
         </div>
     )

@@ -1,5 +1,5 @@
+import { toSupabaseDate } from "@/lib/date";
 import supabase from "@/lib/supabase";
-import { MemberDTO } from "@/models/member";
 import { TransactionDTO, TransactionType } from "@/models/transaction";
 import { addDays } from "date-fns";
 
@@ -38,14 +38,13 @@ export async function insertTransaction(memberId: string, type: TransactionType,
 export async function getTransactionsByDate(date: Date): Promise<TransactionDTO[]> {
     
     const nextDay = addDays(date, 1);
-
     
     const { data: transactions, error } = 
         await supabase
             .from('transactions')
             .select("*")
-            .lte('transaction_created_at', nextDay.toISOString())
-            .gte('transaction_created_at', date.toISOString().slice(0, 10))
+            .lte('transaction_created_at', toSupabaseDate(nextDay))
+            .gte('transaction_created_at', toSupabaseDate(date).slice(0, 10)) // this is needed done to set the start as date with 00:00 time.
             .eq('transaction_type', "MEMBER_PAID")
             .order("transaction_created_at", { ascending: false})
 

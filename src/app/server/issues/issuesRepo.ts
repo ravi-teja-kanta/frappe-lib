@@ -1,5 +1,7 @@
+import { toSupabaseDate } from "@/lib/date";
 import supabase from "@/lib/supabase";
 import { IssueCountDateWise, IssueDTO, IssueStatus } from "@/models/issue";
+import { addDays } from "date-fns";
 
 export async function getIssueFromBookId(bookId: string): Promise<IssueDTO | undefined> {
     
@@ -72,12 +74,11 @@ export async function getIssuesFromMemberId(memberId: string): Promise<IssueDTO[
 }
 
 export async function getAllIssuesOfDate(date: Date): Promise<IssueDTO[]> {
-    
     const { data: issues, error } = 
         await supabase
             .from('issues')
             .select('*')
-            .eq("issue_date", date.toISOString())
+            .eq("issue_date", toSupabaseDate(date))
             .eq("issue_status", "ISSUED_TO_MEMBER");
     
     if (error) throw Error(error.message);
@@ -85,7 +86,7 @@ export async function getAllIssuesOfDate(date: Date): Promise<IssueDTO[]> {
 }
 
 export async function getIssuesByDates(dates: Date[]): Promise<IssueDTO[]> {
-    const isoDates = dates.map(d => d.toISOString());
+    const isoDates = dates.map(toSupabaseDate);
     const { data: issues, error } = 
         await supabase
             .from('issues')

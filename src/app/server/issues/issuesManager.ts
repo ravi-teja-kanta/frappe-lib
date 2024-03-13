@@ -54,6 +54,7 @@ export async function issueBookToMember(bookId: string, memberId: string, rentFe
 }
 
 export async function getTodaysIssues() {
+    
     return await getAllIssuesOfDate(new Date());
 }
 

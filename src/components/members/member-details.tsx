@@ -38,7 +38,7 @@ export default function MemberDetails({ member, borrowedBooks, outStandingDues }
     
 
     const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>("NOT_STARTED");
-    const [dues, setDues] = useState<number>(outStandingDues || 0);
+    const [dues, setDues] = useState<number>();
 
     if (!member || !borrowedBooks || (outStandingDues === undefined)) 
         return <Image src={emptyMembers} alt={""} width={300} className="mx-auto mt-16" />
@@ -62,11 +62,11 @@ export default function MemberDetails({ member, borrowedBooks, outStandingDues }
                 <Card className="w-1/3">
                     <CardHeader>
                         <CardDescription>Outstanding Dues</CardDescription>
-                        <CardTitle className="text-2xl">{toRupees(dues)} INR</CardTitle>
+                        <CardTitle className="text-2xl">{toRupees(dues || outStandingDues)} INR</CardTitle>
                     </CardHeader>
                     <CardFooter>
                         {
-                            (paymentStatus !== "PAID" && dues > 0) && 
+                            (paymentStatus !== "PAID" && (dues || outStandingDues) > 0) && 
                             <div>
                                 <Button className="ml-auto w-[80px]" onClick={handlePay}>Pay</Button>
                                 {
