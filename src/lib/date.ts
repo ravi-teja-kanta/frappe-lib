@@ -1,3 +1,3 @@
 export function toSupabaseDate(date: Date) {
-    return new Date(date.valueOf() + date.getTimezoneOffset() * 60 * 1000).toISOString();
+    return new Date(date).toLocaleString('en-US', { timeZone: 'Asia/Jakarta' });
 }
