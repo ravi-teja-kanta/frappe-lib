@@ -16,7 +16,7 @@ export function OverViewTab({numberOfIssues, newRegistrations, trans, dayWiseIss
 
     return (
         <div className="flex flex-col mx-auto w-3/4 space-y-2">
-            <div className="text-slate-400 mt-2">Today's Stats</div>
+            <div className="text-slate-400 mt-2">{"Today's Stats"}</div>
             
             <StatsNav numberOfIssues={numberOfIssues} totalRevenue={totalRevenue} newRegistrations={newRegistrations} />
             <div className="flex space-x-2">

@@ -35,12 +35,13 @@ export default function MemberDetails({ member, borrowedBooks, outStandingDues }
             setDues(0);
         }
     }
-    if (!member || !borrowedBooks || (outStandingDues === undefined)) 
-        return <Image src={emptyMembers} alt={""} width={300} className="mx-auto mt-16" />
+    
 
     const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>("NOT_STARTED");
-    const [dues, setDues] = useState<number>(outStandingDues);
+    const [dues, setDues] = useState<number>(outStandingDues || 0);
 
+    if (!member || !borrowedBooks || (outStandingDues === undefined)) 
+        return <Image src={emptyMembers} alt={""} width={300} className="mx-auto mt-16" />
     
     return (
         <div className="flex flex-col mt-6 mx-auto w-3/4 space-y-4">

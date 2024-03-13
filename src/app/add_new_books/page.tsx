@@ -57,7 +57,7 @@ export default function Page() {
                         {
                             books.map((book) => {
                                 return (
-                                    <Card className="w-1/2 ">
+                                    <Card className="w-1/2 " key={book.id}>
                                         <CardHeader>
                                             <CardTitle>{book.book_title}</CardTitle>
                                             <CardDescription>{book.book_authors}</CardDescription>

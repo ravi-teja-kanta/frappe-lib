@@ -44,7 +44,7 @@ export default function BooksTab() {
                     <BookList books={books} />
                     :   <div className="flex flex-col space-y-4">
                             <div className=" text-slate-400">
-                                Search full words like "harry" , "rowling" or "shakespeare"
+                                Search full words like harry, rowling or shakespeare
                                 
                             </div>
                             <Image src={emptyBooks} alt={""} width={350} className="mx-auto" />

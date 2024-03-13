@@ -56,7 +56,7 @@ export function ReturnsList({memberId, books}: BookReturnListProps) {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {books.map((b) => <ReturnsListItem book={b} memberId={memberId} />)}
+                {books.map((b) => <ReturnsListItem book={b} memberId={memberId} key={b.id} />)}
             </TableBody>
         </Table>
         </div>
