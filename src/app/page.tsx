@@ -4,7 +4,7 @@ import MembersTab from "@/components/members/members-tab";
 import { OverViewTab } from "@/components/reports/overview-tab";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { IssueDTO } from "@/models/issue";
+import { IssueCountDateWise, IssueDTO } from "@/models/issue";
 import { toRupees, TransactionDTO } from "@/models/transaction";
 import { AvatarIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
@@ -27,19 +27,18 @@ export default function Home() {
 			trans,
 			dayWiseIssueCount
 		]) => {
-			 setIssues(issues);
-			 setNewRegs(newRegs.length);
-			 setTrans(trans);
-			 // @ts-ignore
+			 setIssueCountToday(issues.length);
+			 setNewMembershipCountToday(newRegs.length);
+			 setTransactionsToday(trans);
 			 setDayWiseIssueCount(dayWiseIssueCount)
 		})
 	}, []);
 	
 
-	const [issues, setIssues] = useState<IssueDTO[]>();
-	const [newRegs, setNewRegs] = useState<number>();
-	const [trans, setTrans] = useState<TransactionWithMemberDTO[]>();
-	const [dayWiseIssueCount, setDayWiseIssueCount] = useState();
+	const [issueCountToday, setIssueCountToday] = useState<number>();
+	const [newMembershipCountToday, setNewMembershipCountToday] = useState<number>();
+	const [transactionsToday, setTransactionsToday] = useState<TransactionWithMemberDTO[]>();
+	const [dayWiseIssueCount, setDayWiseIssueCount] = useState<IssueCountDateWise[]>();
 
   	return (
 		<main className="flex min-h-screen flex-col p-12">
@@ -66,10 +65,12 @@ export default function Home() {
 						<TabsTrigger value="members">Members</TabsTrigger>
 					</TabsList>
 					<TabsContent value="overview">
-						
-						<OverViewTab numberOfIssues={issues?.length} newRegistrations={newRegs} trans={trans} dayWiseIssueCount={dayWiseIssueCount} />
-						
-						
+						<OverViewTab 
+							numberOfIssues={issueCountToday} 
+							newRegistrations={newMembershipCountToday} 
+							trans={transactionsToday} 
+							dayWiseIssueCount={dayWiseIssueCount}
+						/>
 					</TabsContent>
 					<TabsContent value="books">
 						<BooksTab />

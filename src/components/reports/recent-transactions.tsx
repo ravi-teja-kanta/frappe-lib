@@ -29,8 +29,9 @@ export function RecentTransactions({transactionsWithMemberDetails}: RecentTransa
             
             <div className=" flex flex-col space-y-2 mt-2">
                 {
-                    transactionsWithMemberDetails?.map(TransactionListItem) ||
-                    <div className="text-sm mt-4 text-center text-slate-400">No recent transactions</div>
+                    transactionsWithMemberDetails?.length > 0 ?
+                    transactionsWithMemberDetails.map(TransactionListItem)
+                    : <div className="text-sm mt-4 text-center text-slate-400">No transactions today</div>
                 }
             </div> 
         </div> 

@@ -1,4 +1,4 @@
-import { IssueBookToMemberResponse, IssueDTO, IssueStatus } from "@/models/issue";
+import { IssueBookToMemberResponse, IssueCountDateWise, IssueDTO, IssueStatus } from "@/models/issue";
 import { getActiveIssuesOfMember, getIssue, getLast14DaysOfIssues, getTodaysIssues, issueBookToMember } from "./issuesManager";
 
 export async function getLatestIssueStatusofBook(bookId: string): Promise<IssueDTO | undefined> {
@@ -40,7 +40,7 @@ export async function getAllIssuesOfToday() {
     }
 }
 
-export async function getDayWiseIssueCount() {
+export async function getDayWiseIssueCount(): Promise<IssueCountDateWise[]> {
     try {
         return await getLast14DaysOfIssues();
     } catch(e) {

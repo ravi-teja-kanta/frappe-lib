@@ -1,4 +1,4 @@
-import { IssueBookToMemberResponse, IssueDTO } from "@/models/issue";
+import { IssueBookToMemberResponse, IssueCountDateWise, IssueDTO } from "@/models/issue";
 import { toPaise, toRupees } from "@/models/transaction";
 import { subDays } from "date-fns";
 import _ from "lodash";
@@ -71,16 +71,17 @@ export async function getLast14DaysOfIssues() {
     }
     const issues = await getIssuesByDates(last14Dates);
 
-    const dateCount = _.groupBy(issues, (i) => i.issue_date);
-
-    return Object.keys(dateCount).map(d => {
-        return {
-            "date": d,
-            "count": dateCount[d].length
-        }
-        // @ts-ignore
-    }).sort((a, b) => {
-        if (a.date < b.date) return -1;
-        else 1
-    })
+    const dateCountObj = _.groupBy(issues, (i) => i.issue_date);
+    const dateCountArr = 
+        Object.keys(dateCountObj)
+            .map(
+                d =>  
+                {
+                    return {
+                    "date": d,
+                    "count": dateCountObj[d].length
+                    }  
+                }
+            )
+    return dateCountArr.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 }

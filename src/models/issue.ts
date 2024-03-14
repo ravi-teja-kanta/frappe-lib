@@ -14,6 +14,6 @@ export type IssueBookToMemberResponse = {
 }
 
 export type IssueCountDateWise = {
-    date: Date,
+    date: string,
     count: number
 }

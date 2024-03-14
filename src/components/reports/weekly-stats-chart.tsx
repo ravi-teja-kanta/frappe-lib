@@ -22,23 +22,29 @@ export function WeeklyStatsChart({ dayWiseIssueCount }: any) {
 		  </g>
 		);
 	  };
+	
     return (
         <div style={{ width: '90%', height: 400 }} className="mr-auto border rounded p-4">
-			<ResponsiveContainer>
-				<ComposedChart
-					data={dayWiseIssueCount}
-					margin={{
-					top: 20,
-					right: 20,
-					bottom: 20,
-					left: 20,
-					}}
-				>
-					<XAxis dataKey="date" tick={CustomXAxisTick}   />
-					<Legend />
-					<Bar name={" Books Issued per day"} type='monotone' dataKey="count" barSize={40} fill="#FFFFFF" label={renderCustomBarLabel} />
-				</ComposedChart>
-			</ResponsiveContainer>
+			{
+				dayWiseIssueCount ?
+				<ResponsiveContainer>
+					<ComposedChart
+						data={dayWiseIssueCount}
+						margin={{
+						top: 20,
+						right: 20,
+						bottom: 20,
+						left: 20,
+						}}
+					>
+						<XAxis dataKey="date" tick={CustomXAxisTick}   />
+						<Legend />
+						<Bar name={" Books Issued per day"} type='monotone' dataKey="count" barSize={40} fill="#FFFFFF" label={renderCustomBarLabel} />
+					</ComposedChart>
+				</ResponsiveContainer>
+				: <div className='my-auto text-center text-slate-400'>{"loading chart..."}</div>
+			}
+			
       </div>
     )
 }
